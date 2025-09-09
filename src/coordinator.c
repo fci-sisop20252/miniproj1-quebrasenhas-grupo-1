@@ -67,6 +67,10 @@ int main(int argc, char *argv[]) {
     // Se não, imprimir mensagem de uso e sair com código 1
     
     // IMPLEMENTE AQUI: verificação de argc e mensagem de erro
+    if (argc != 5){
+        printf("Quantidade de argumentos invalida.\n");
+        exit(1);
+    }
     
     // Parsing dos argumentos (após validação)
     const char *target_hash = argv[1];
@@ -79,6 +83,21 @@ int main(int argc, char *argv[]) {
     // - password_len deve estar entre 1 e 10
     // - num_workers deve estar entre 1 e MAX_WORKERS
     // - charset não pode ser vazio
+
+    if (password_len >= 1 && password_len <=10){
+        printf("Quantidade de caracteres da senha invalida.\n");
+        exit(1);
+    }
+
+    if (num_workers >=1 && num_workers<=MAX_WORKERS){
+        printf("Quantidade de workers invalido.\n");
+        exit(1);
+    }
+
+    if (charset[0] == '\0'){
+        printf("Charset não pode estar vazio.\n");
+        exit(1);
+    }
     
     printf("=== Mini-Projeto 1: Quebra de Senhas Paralelo ===\n");
     printf("Hash MD5 alvo: %s\n", target_hash);
@@ -103,6 +122,9 @@ int main(int argc, char *argv[]) {
     // IMPLEMENTE AQUI:
     // long long passwords_per_worker = ?
     // long long remaining = ?
+
+    long long passwords_per_worker = total_space / num_workers;
+    long long remaining = total_space % num_workers;
     
     // Arrays para armazenar PIDs dos workers
     pid_t workers[MAX_WORKERS];
@@ -111,7 +133,28 @@ int main(int argc, char *argv[]) {
     printf("Iniciando workers...\n");
     
     // IMPLEMENTE AQUI: Loop para criar workers
+    pid_t fd;
+    int l, r;
+    char start_password[password_len], end_password[password_len];
     for (int i = 0; i < num_workers; i++) {
+        l =  i * passwords_per_worker;
+        r = l + passwords_per_worker - 1;
+        index_to_password(l, charset, charset_len, password_len, start_password);
+        index_to_password(r, charset, charset_len, password_len, end_password);
+
+        fd = fork();
+
+        if (fd < 0){
+            printf("Algo deu errado.");
+            exit(1);
+        }
+        else if (fd > 0){
+            workers[i] = fd;
+        }
+        else{
+            execl("./worker.c", "")
+        }
+
         // TODO: Calcular intervalo de senhas para este worker
         // TODO: Converter indices para senhas de inicio e fim
         // TODO 4: Usar fork() para criar processo filho
