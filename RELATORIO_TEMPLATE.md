@@ -176,7 +176,8 @@ Além do mais, é necessário coordenar a finalização dos demais, aguardando-o
 **Qual foi o maior desafio técnico que você enfrentou?**
 [Descreva um problema e como resolveu. Ex: "Tive dificuldade com o incremento de senha, mas resolvi tratando-o como um contador em base variável"]
 
----
+Luis: Tive dificuldade em entender como implementar o incremento de senha no worker, porém consegui entender como utilizar um contador para apontar para o próximo caractere dentro do charset. No inicio pensei numa solução muito complicado que não consegui implementar, mas vendo o TUTORIAL consegue entender como poderia ser feito.
+
 
 ## Comandos de Teste Utilizados
 
