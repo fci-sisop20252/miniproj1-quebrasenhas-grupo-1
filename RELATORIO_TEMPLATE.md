@@ -1,6 +1,6 @@
 # Relatório: Mini-Projeto 1 - Quebra-Senhas Paralelo
 
-**Aluno(s):** Nome (Matrícula), Nome (Matrícula),,,  
+**Aluno(s):** Luis Fernando de Mesquita Pereira (10410686), Nome (Matrícula),,,  
 ---
 ## 1. Estratégia de Paralelização
 
@@ -142,6 +142,12 @@ for (int i = 0; i < num_workers; i++) {
 
 [Explique como você implementou uma escrita atômica e como isso evita condições de corrida]
 Leia sobre condições de corrida (aqui)[https://pt.stackoverflow.com/questions/159342/o-que-%C3%A9-uma-condi%C3%A7%C3%A3o-de-corrida]
+
+Ao dividirmos a carga de trabalho entre os workers disponíveis, com cada um deles tenho um espaço de senhas disponíveis, foi 
+possível evitar as condições de corrida em que mais de worker poderia escrever no mesmo arquivo simultaneamente.
+Isso não acontece, porque somente um único worker vai ter a senha correta no seu espaço, então somente um worker vai criar o arquivo. Como também, periodicamente cada worker verifica se algum outro worker já encontrou a senha e se sim ele não precisa testar todas as senhas do seu espaço;
+
+Essa divisão da carga de trabalho por worker garante que a operação de escrita seja feita de forma segura e evita as condições de corrida, onde múltiplos processos poderiam tentar escrever no mesmo arquivo simultaneamente.
 
 **Como o coordinator consegue ler o resultado?**
 
