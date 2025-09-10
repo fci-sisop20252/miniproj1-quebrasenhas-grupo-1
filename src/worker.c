@@ -6,6 +6,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include "hash_utils.h"
+#include "hash_utils.c"
 
 /**
  * PROCESSO TRABALHADOR - Mini-Projeto 1: Quebra de Senhas Paralelo
