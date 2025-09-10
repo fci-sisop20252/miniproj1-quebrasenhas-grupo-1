@@ -135,7 +135,8 @@ int main(int argc, char *argv[]) {
 
 
     pid_t fd;
-    int l, r;
+    long long count, r, l = 0;
+
     char start_password[password_len], end_password[password_len];
     // IMPLEMENTE AQUI: Loop para criar workers
     for (int i = 0; i < num_workers; i++) {
@@ -145,19 +146,16 @@ int main(int argc, char *argv[]) {
         // TODO 5: No processo pai: armazenar PID
         // TODO 6: No processo filho: usar execl() para executar worker
         // TODO 7: Tratar erros de fork() e execl()
+        count = passwords_per_worker + (i < remaining ? 1: 0);
+        r = l + count - 1;
+      
 
-        if (remaining > 0){
-            l = i * (passwords_per_worker + 1);
-            r = l + passwords_per_worker;
-            remaining--;
-        }
-        else{
-            l = i * passwords_per_worker;
-            r = l + passwords_per_worker - 1;
-        }
-        
+        if (r > total_space) r = total_space - 1;
+
         index_to_password(l, charset, charset_len, password_len, start_password);
         index_to_password(r, charset, charset_len, password_len, end_password);
+
+        l = r + 1;
 
         fd = fork();
         if (fd > 0){
@@ -258,5 +256,6 @@ int main(int argc, char *argv[]) {
                 printf("Senha não pode ser encontrada.\n");
     }
 
+    printf("Tempo de execução: %.10f", elapsed_time);
     return 0;
 }
