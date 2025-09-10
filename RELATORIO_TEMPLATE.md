@@ -162,13 +162,15 @@ O speedup é o tempo do teste com 1 worker dividido pelo tempo com 4 workers.
 
 | Teste | 1 Worker | 2 Workers | 4 Workers | Speedup (4w) |
 |-------|----------|-----------|-----------|--------------|
-| Hash: 202cb962ac59075b964b07152d234b70<br>Charset: "0123456789"<br>Tamanho: 3<br>Senha: "123" | ___s | ___s | ___s | ___ |
-| Hash: 5d41402abc4b2a76b9719d911017c592<br>Charset: "abcdefghijklmnopqrstuvwxyz"<br>Tamanho: 5<br>Senha: "hello" | ___s | ___s | ___s | ___ |
+| Hash: 202cb962ac59075b964b07152d234b70<br>Charset: "0123456789"<br>Tamanho: 3<br>Senha: "123" | 0.004s | 0.007s | 0.010s | 0,4 |
+| Hash: 5d41402abc4b2a76b9719d911017c592<br>Charset: "abcdefghijklmnopqrstuvwxyz"<br>Tamanho: 5<br>Senha: "hello" | 4.643s | 11.460s | 15.549s | 0,298 |
 
 **O speedup foi linear? Por quê?**
 [Analise se dobrar workers realmente dobrou a velocidade e explique o overhead de criar processos]
 
----
+Não houve speedup linear em nenhum dos testes realizados. Ao separar a carga de trabalho entre os workers, o tempo total de execução acabou sendo maior do que executar tudo com apenas um worker, sendo que quando colocamos o número máximo de workers (4) o tempo de finalização aumentou drasticamente.
+Isso aconteceu, porque como cada worker é um processo separado, o SO precisa alternar entre eles, e isso gera overhead, como também, existe um tempo gasto para criar novos processos e colocá-los no estado pronto, o que contribuiu para o aumento do tempo total. 
+Além do mais, é necessário coordenar a finalização dos demais, aguardando-os terminar ou verificando se algum outro worker encontrou a senha, tudo isso contribuiu para que o Speed Up não seja linear.
 
 ## 5. Desafios e Aprendizados
 **Qual foi o maior desafio técnico que você enfrentou?**
