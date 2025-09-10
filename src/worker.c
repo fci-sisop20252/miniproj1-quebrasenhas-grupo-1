@@ -6,7 +6,6 @@
 #include <sys/types.h>
 #include <time.h>
 #include "hash_utils.h"
-#include "hash_utils.c"
 
 /**
  * PROCESSO TRABALHADOR - Mini-Projeto 1: Quebra de Senhas Paralelo
@@ -130,33 +129,36 @@ int main(int argc, char *argv[]) {
     printf("[Worker %d] Iniciado: %s até %s\n", worker_id, start_password, end_password);
     
     // Buffer para a senha atual
-    char current_password[11];
-    strcpy(current_password, start_password);
-    
+    char current_password[password_len + 1];
+    strncpy(current_password, start_password, password_len);
+    current_password[password_len] = '\0';
+
     // Buffer para o hash calculado
     char computed_hash[33];
     
     // Contadores para estatísticas
     long long passwords_checked = 0;
     time_t start_time = time(NULL);
-    time_t last_progress_time = start_time;
+    //time_t last_progress_time = start_time;
     
     // Loop principal de verificação
     while (1) {
         // TODO 3: Verificar periodicamente se outro worker já encontrou a senha
         // DICA: A cada PROGRESS_INTERVAL senhas, verificar se arquivo resultado existe
-        if(passwords_checked == PROGRESS_INTERVAL) 
+        if(passwords_checked % PROGRESS_INTERVAL == 0) 
         {
-            char file_name[256];
+            if(check_result_exists()){
+                char file_name[256];
 
-            strcpy(file_name, target_hash);
-            sprintf(file_name, ":%d", worker_id);
-            
-            int fd = open(file_name, O_RDONLY);
+                strcpy(file_name, target_hash);
+                sprintf(file_name, ":%d", worker_id);
+                
+                int fd = open(file_name, O_RDONLY);
 
-            if(fd != -1) {
-                printf("[WORKER:%d] Senha encontrada %s", worker_id, file_name);
-                close(fd);
+                if(fd != -1) {
+                    printf("[WORKER:%d] Senha encontrada %s", worker_id, file_name);
+                    close(fd);
+                }
             }
         }
         
