@@ -1,6 +1,6 @@
 # Relatório: Mini-Projeto 1 - Quebra-Senhas Paralelo
 
-**Aluno(s):** Luis Fernando de Mesquita Pereira (10410686), Nome (Matrícula),,,  
+**Aluno(s):** Luis Fernando de Mesquita Pereira (10410686), Rafael Santos Lourenço da Silva (10403588)  
 ---
 ## 1. Estratégia de Paralelização
 
